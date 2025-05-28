@@ -58,6 +58,13 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
 
+    // Network
+    implementation(libs.retrofit)
+    implementation(libs.moshi)
+    implementation(libs.converter.moshi)
+    debugImplementation(libs.logging.interceptor)
+    ksp(libs.moshi.kotlin.codegen)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
