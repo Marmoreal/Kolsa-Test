@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -18,6 +19,6 @@ class WorkoutsApiModule {
     fun provideWorkoutsApiService(
         retrofit: Retrofit,
     ): WorkoutsApiService {
-        return SemimockWorkoutsApiService(retrofit.create(WorkoutsApiService::class.java))
+        return SemimockWorkoutsApiService(retrofit.create())
     }
 }

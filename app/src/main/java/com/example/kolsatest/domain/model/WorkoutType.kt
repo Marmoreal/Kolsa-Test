@@ -1,9 +1,9 @@
 package com.example.kolsatest.domain.model
 
-enum class WorkoutType(val type: Int) {
-    WORKOUT(1),
-    STREAM(2),
-    COMPLEX(3);
+enum class WorkoutType {
+    WORKOUT,
+    STREAM,
+    COMPLEX;
 
     companion object {
         fun fromInt(value: Int): WorkoutType = when (value) {

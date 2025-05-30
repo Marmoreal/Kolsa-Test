@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/workoutsFragment"
-        android:name="com.example.kolsatest.presentation.workouts.WorkoutsFragment"
+        android:name="com.example.kolsatest.presentation.workouts.ui.WorkoutsFragment"
         android:label="WorkoutsFragment" />
 
 </navigation>

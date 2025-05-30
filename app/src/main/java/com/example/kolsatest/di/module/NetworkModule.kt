@@ -1,11 +1,11 @@
 package com.example.kolsatest.di.module
 
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,13 +18,14 @@ private const val BASE_URL = "http://ref.test.kolsa.ru/"
 class NetworkModule {
 
     @Provides
-    @Singleton
-    fun provideHttpLoggingInterceptor() =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    fun provideHttpLoggingInterceptor() : HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().setLevel(
+            HttpLoggingInterceptor.Level.BODY
+        )
+    }
 
 
     @Provides
-    @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
@@ -34,13 +35,13 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideMoshi(): Moshi {
-        return Moshi.Builder().build()
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 
     @Provides
-    @Singleton
     fun provideRetrofit(
         moshi: Moshi,
         client: OkHttpClient,
