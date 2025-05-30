@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
 private const val BASE_URL = "http://ref.test.kolsa.ru/"
 
@@ -18,7 +19,8 @@ private const val BASE_URL = "http://ref.test.kolsa.ru/"
 class NetworkModule {
 
     @Provides
-    fun provideHttpLoggingInterceptor() : HttpLoggingInterceptor {
+    @Singleton
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().setLevel(
             HttpLoggingInterceptor.Level.BODY
         )
@@ -26,6 +28,7 @@ class NetworkModule {
 
 
     @Provides
+    @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
@@ -35,6 +38,7 @@ class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
@@ -42,6 +46,7 @@ class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideRetrofit(
         moshi: Moshi,
         client: OkHttpClient,
