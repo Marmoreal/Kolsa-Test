@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.navigation.safeargs)
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
@@ -64,6 +66,14 @@ dependencies {
     implementation(libs.converter.moshi)
     debugImplementation(libs.logging.interceptor)
     ksp(libs.moshi.kotlin.codegen)
+
+    // Player
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.coil.video)
 
     // Testing
     testImplementation(libs.junit)

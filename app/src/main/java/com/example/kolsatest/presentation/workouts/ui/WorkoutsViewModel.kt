@@ -15,44 +15,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutsViewModel @Inject constructor(
-    getWorkoutsUseCase: GetWorkoutsUseCase,
-    private val mapper: WorkoutsUiMapper,
+    private val getWorkoutsUseCase: GetWorkoutsUseCase,
+    private val uiMapper: WorkoutsUiMapper,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<WorkoutUiState>(WorkoutUiState.Loading)
+    private val _state = MutableStateFlow(WorkoutsUiState())
     val state = _state.asStateFlow()
 
     init {
+        getWorkouts()
+    }
+
+    fun getWorkouts() {
         getWorkoutsUseCase.execute().onEach { result ->
             _state.value = when (result) {
                 is LoadableResult.Loading -> {
-                    WorkoutUiState.Loading
+                    uiMapper.setLoading(_state.value)
                 }
-
                 is LoadableResult.Success -> {
-                    mapper.getWorkouts(
+                    uiMapper.getWorkouts(
                         workouts = result.value,
                     )
                 }
-
                 is LoadableResult.Failure -> {
-                    mapper.setError(result.error)
+                    uiMapper.setError(
+                        currentState = _state.value,
+                        error = result.error,
+                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     fun onFilterClicked(filterItem: WorkoutUiFilter) {
-        _state.value = mapper.updateWorkoutsByFilter(
+        _state.value = uiMapper.updateWorkoutsByFilter(
             filterItem = filterItem,
-            currentState = _state.value as WorkoutUiState.Success,
+            currentState = _state.value,
         )
     }
 
     fun updateSearchQuery(query: String) {
-        _state.value = mapper.updateWorkoutsBySearchQuery(
+        _state.value = uiMapper.updateWorkoutsBySearchQuery(
             query = query.lowercase(),
-            currentState = _state.value as WorkoutUiState.Success,
+            currentState = _state.value,
         )
     }
 }

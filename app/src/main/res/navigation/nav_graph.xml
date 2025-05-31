@@ -7,6 +7,21 @@
     <fragment
         android:id="@+id/workoutsFragment"
         android:name="com.example.kolsatest.presentation.workouts.ui.WorkoutsFragment"
-        android:label="WorkoutsFragment" />
+        android:label="WorkoutsFragment">
+
+        <action
+            android:id="@+id/action_workoutsFragment_to_workoutFragment"
+            app:destination="@id/workoutFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.example.kolsatest.presentation.workout.ui.WorkoutFragment"
+        android:label="workoutFragment">
+
+        <argument
+            android:name="workout"
+            app:argType="com.example.kolsatest.presentation.workouts.model.WorkoutUi" />
+    </fragment>
 
 </navigation>

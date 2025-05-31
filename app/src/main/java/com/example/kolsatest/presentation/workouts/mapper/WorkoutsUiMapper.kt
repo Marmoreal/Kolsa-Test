@@ -9,7 +9,7 @@ import com.example.kolsatest.domain.model.WorkoutType.STREAM
 import com.example.kolsatest.domain.model.WorkoutType.WORKOUT
 import com.example.kolsatest.presentation.workouts.model.WorkoutUi
 import com.example.kolsatest.presentation.workouts.model.WorkoutUiFilter
-import com.example.kolsatest.presentation.workouts.ui.WorkoutUiState
+import com.example.kolsatest.presentation.workouts.ui.WorkoutsUiState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -20,10 +20,12 @@ class WorkoutsUiMapper @Inject constructor(
 
     fun getWorkouts(
         workouts: List<Workout>
-    ): WorkoutUiState {
+    ): WorkoutsUiState {
         val filters = workouts.map { fromModelToUi(it.type) }.distinctBy { it.title }
         val uiWorkouts = workouts.map { fromModelToUi(it) }
-        return WorkoutUiState.Success(
+        return WorkoutsUiState(
+            isLoading = false,
+            isEmptyData = uiWorkouts.isEmpty(),
             workouts = uiWorkouts,
             filters = listOf(
                 WorkoutUiFilter.All(
@@ -37,8 +39,8 @@ class WorkoutsUiMapper @Inject constructor(
 
     fun updateWorkoutsByFilter(
         filterItem: WorkoutUiFilter,
-        currentState: WorkoutUiState.Success,
-    ): WorkoutUiState {
+        currentState: WorkoutsUiState,
+    ): WorkoutsUiState {
         val updatedFilters = currentState.filters.onEach { it.isSelected = filterItem == it }
 
         val updatedWorkouts = if (filterItem is WorkoutUiFilter.ByType) {
@@ -50,6 +52,7 @@ class WorkoutsUiMapper @Inject constructor(
         }
 
         return currentState.copy(
+            isEmptyData = updatedWorkouts.isEmpty(),
             filters = updatedFilters,
             filteredWorkouts = updatedWorkouts,
         )
@@ -57,8 +60,8 @@ class WorkoutsUiMapper @Inject constructor(
 
     fun updateWorkoutsBySearchQuery(
         query: String,
-        currentState: WorkoutUiState.Success,
-    ): WorkoutUiState {
+        currentState: WorkoutsUiState,
+    ): WorkoutsUiState {
         val currentFilter = currentState.filters.find { it.isSelected }
         val updatedWorkouts =
             currentState.workouts.filter {
@@ -70,12 +73,23 @@ class WorkoutsUiMapper @Inject constructor(
             }
 
         return currentState.copy(
+            isEmptyData = updatedWorkouts.isEmpty(),
             filteredWorkouts = updatedWorkouts,
             query = query,
         )
     }
 
-    fun setError(error: Throwable) = WorkoutUiState.Error(error)
+    fun setLoading(
+        currentState: WorkoutsUiState,
+    ) = currentState.copy(isLoading = true)
+
+    fun setError(
+        currentState: WorkoutsUiState,
+        error: Throwable
+    ) = currentState.copy(
+        isLoading = false,
+        error = error,
+    )
 
     private fun fromModelToUi(model: Workout): WorkoutUi {
         return WorkoutUi(

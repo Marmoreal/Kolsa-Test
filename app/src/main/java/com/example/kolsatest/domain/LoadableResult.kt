@@ -12,10 +12,4 @@ sealed interface LoadableResult<R> {
     ) : LoadableResult<R> {
         val error = throwable
     }
-
-    val isLoading: Boolean get() = this is Loading
-
-    val isSuccess: Boolean get() = this is Success
-
-    val isFailure: Boolean get() = this is Failure
 }

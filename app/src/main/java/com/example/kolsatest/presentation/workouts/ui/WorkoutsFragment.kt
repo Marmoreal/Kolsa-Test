@@ -8,7 +8,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.kolsatest.databinding.WorkoutsFragmentBinding
+import com.example.kolsatest.presentation.commonview.StateViewFlipper
 import com.example.kolsatest.presentation.workouts.adapters.FiltersAdapter
 import com.example.kolsatest.presentation.workouts.adapters.WorkoutsAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +43,7 @@ class WorkoutsFragment : Fragment() {
     }
 
     private fun setupLayout() {
+        setupViewFlipper()
         setupSearch()
         initAdapter()
     }
@@ -48,13 +51,25 @@ class WorkoutsFragment : Fragment() {
     private fun onBindViewModel() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
-                if (state is WorkoutUiState.Success) {
+                binding.root.setState(state)
+
+                if (binding.root.currentState() == StateViewFlipper.State.DATA) {
                     filtersAdapter.submitList(state.filters)
-                    workoutsAdapter.submitList(state.filteredWorkouts) {
-                        binding.workoutRecyclerView.scrollToPosition(0)
-                    }
+
+                    binding.viewFlipper.displayedChild = if (state.filteredWorkouts.isNotEmpty()) {
+                        workoutsAdapter.submitList(state.filteredWorkouts) {
+                            binding.workoutRecyclerView.scrollToPosition(0)
+                        }
+                        STATE_DATA
+                    } else STATE_EMPTY
                 }
             }
+        }
+    }
+
+    private fun setupViewFlipper() = with(binding.root) {
+        setRetryMethod {
+            viewModel.getWorkouts()
         }
     }
 
@@ -74,10 +89,17 @@ class WorkoutsFragment : Fragment() {
         }
 
         binding.workoutRecyclerView.apply {
-            workoutsAdapter.onWorkoutClick = { id ->
-
+            workoutsAdapter.onWorkoutClick = { workout ->
+                findNavController().navigate(
+                    WorkoutsFragmentDirections.actionWorkoutsFragmentToWorkoutFragment(workout)
+                )
             }
             adapter = workoutsAdapter
         }
+    }
+
+    companion object {
+        private const val STATE_EMPTY = 0
+        private const val STATE_DATA = 1
     }
 }

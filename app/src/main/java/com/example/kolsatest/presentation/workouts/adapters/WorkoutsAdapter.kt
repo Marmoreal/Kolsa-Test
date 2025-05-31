@@ -12,7 +12,7 @@ class WorkoutsAdapter @Inject constructor() : ListAdapter<WorkoutUi, WorkoutView
     WorkoutDiffUtilItemCallback
 ) {
 
-    lateinit var onWorkoutClick: (Int) -> Unit
+    lateinit var onWorkoutClick: (WorkoutUi) -> Unit
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

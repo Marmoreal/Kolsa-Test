@@ -7,5 +7,9 @@
     <string name="workouts_filter_workout">тренировка</string>
     <string name="workouts_filter_stream">эфир</string>
     <string name="workouts_filter_complex">комплекс</string>
+    <string name="workouts_list_empty_title">Пока тренировок нет,\n но скоро появятся!</string>
 
+    <string name="state_view_flipper_error_state_common_title">Что-то пошло не так,\n попробуйте обновить</string>
+    <string name="state_view_flipper_error_state_network_title">Проверьте интернет\n и попробуйте обновить</string>
+    <string name="state_view_flipper_error_state_button_update">Обновить</string>
 </resources>
