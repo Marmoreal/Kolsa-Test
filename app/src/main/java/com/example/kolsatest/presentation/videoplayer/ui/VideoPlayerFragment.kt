@@ -41,6 +41,7 @@ class VideoPlayerFragment @Inject constructor() : BaseFragment() {
 
     private val args: VideoPlayerFragmentArgs by navArgs()
 
+    private val controllerRootView: View by lazy { binding.playerView.findViewById(R.id.customControls) }
     private val buttonClose: View by lazy { binding.playerView.findViewById(R.id.buttonClose) }
     private val playButton: View by lazy { binding.playerView.findViewById(R.id.buttonPlay) }
     private val pauseButton: View by lazy { binding.playerView.findViewById(R.id.buttonPause) }
@@ -84,7 +85,7 @@ class VideoPlayerFragment @Inject constructor() : BaseFragment() {
     }
 
     private fun setupLayout() {
-        binding.root.fitInsetsWithPadding()
+        controllerRootView.fitInsetsWithPadding()
         buttonClose.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -184,6 +185,9 @@ class VideoPlayerFragment @Inject constructor() : BaseFragment() {
     private fun applyControllersVisibility(visible: Boolean) {
         val window = requireActivity().window
         val controller = WindowInsetsControllerCompat(window, requireView())
+
+        // Разрешаем transient скрытие (без задержек)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
         if (visible) {
             controller.show(WindowInsetsCompat.Type.systemBars())
