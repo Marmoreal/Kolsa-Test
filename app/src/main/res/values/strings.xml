@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">KolsaTest</string>
 
-    <string name="workouts_search_hint">Поиск тренировок...</string>
+    <string name="workouts_search_hint">Поиск тренировок…</string>
     <string name="workouts_filter_title">Тип тренировки</string>
     <string name="workouts_filter_all">все</string>
     <string name="workouts_filter_workout">тренировка</string>

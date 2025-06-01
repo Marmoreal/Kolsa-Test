@@ -1,10 +1,8 @@
 package com.example.kolsatest.presentation.extension
 
 import android.view.View
-import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 
 data class InitialPadding(val left: Int, val top: Int, val right: Int, val bottom: Int)
 
