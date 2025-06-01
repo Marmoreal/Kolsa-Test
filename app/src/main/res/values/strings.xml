@@ -12,4 +12,13 @@
     <string name="state_view_flipper_error_state_common_title">Что-то пошло не так,\n попробуйте обновить</string>
     <string name="state_view_flipper_error_state_network_title">Проверьте интернет\n и попробуйте обновить</string>
     <string name="state_view_flipper_error_state_button_update">Обновить</string>
+
+    <string name="video_player_menu_settings_quality">Качество</string>
+    <string name="video_player_menu_settings_rate">Скорость</string>
+
+    <string name="video_player_menu_settings_quality_520">520p</string>
+    <string name="video_player_menu_settings_quality_1280">1280p</string>
+    <string name="video_player_menu_settings_quality_1920">1920p</string>
+
+    <string name="video_player_controls_time_duration_format">%s / %s</string>
 </resources>

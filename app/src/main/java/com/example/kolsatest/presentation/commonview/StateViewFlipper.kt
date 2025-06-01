@@ -57,7 +57,7 @@ class StateViewFlipper @JvmOverloads constructor(
         }
     }
 
-    fun currentState() = state
+    fun currentStateIsData() = state == State.DATA
 
     private fun changeState(newState: State) {
         if (state != newState || displayedChild != newState.displayedChild) {

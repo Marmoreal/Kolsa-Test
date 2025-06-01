@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.kolsatest.databinding.WorkoutsFragmentBinding
-import com.example.kolsatest.presentation.commonview.StateViewFlipper
+import com.example.kolsatest.databinding.FragmentWorkoutsBinding
+import com.example.kolsatest.presentation.commonarchitecture.BaseFragment
+import com.example.kolsatest.presentation.extension.fitInsetsWithPadding
 import com.example.kolsatest.presentation.workouts.adapters.FiltersAdapter
 import com.example.kolsatest.presentation.workouts.adapters.WorkoutsAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,9 +18,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WorkoutsFragment : Fragment() {
+class WorkoutsFragment : BaseFragment() {
 
-    private lateinit var binding: WorkoutsFragmentBinding
+    private lateinit var binding: FragmentWorkoutsBinding
     private val viewModel: WorkoutsViewModel by viewModels()
 
     @Inject lateinit var filtersAdapter: FiltersAdapter
@@ -31,7 +31,7 @@ class WorkoutsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = WorkoutsFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentWorkoutsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,6 +43,7 @@ class WorkoutsFragment : Fragment() {
     }
 
     private fun setupLayout() {
+        binding.root.fitInsetsWithPadding()
         setupViewFlipper()
         setupSearch()
         initAdapter()
@@ -53,7 +54,7 @@ class WorkoutsFragment : Fragment() {
             viewModel.state.collect { state ->
                 binding.root.setState(state)
 
-                if (binding.root.currentState() == StateViewFlipper.State.DATA) {
+                if (binding.root.currentStateIsData()) {
                     filtersAdapter.submitList(state.filters)
 
                     binding.viewFlipper.displayedChild = if (state.filteredWorkouts.isNotEmpty()) {

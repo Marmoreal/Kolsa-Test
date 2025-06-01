@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuItemQuality520"
+        android:title="@string/video_player_menu_settings_quality_520"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuItemQuality1280"
+        android:title="@string/video_player_menu_settings_quality_1280"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuItemQuality1920"
+        android:title="@string/video_player_menu_settings_quality_1920"
+        app:showAsAction="ifRoom" />
+</menu>

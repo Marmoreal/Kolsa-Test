@@ -22,6 +22,19 @@
         <argument
             android:name="workout"
             app:argType="com.example.kolsatest.presentation.workouts.model.WorkoutUi" />
+        <action
+            android:id="@+id/action_workoutFragment_to_videoPlayerFragment"
+            app:destination="@id/videoPlayerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoPlayerFragment"
+        android:name="com.example.kolsatest.presentation.videoplayer.ui.VideoPlayerFragment"
+        android:label="VideoPlayerFragment">
+
+        <argument
+            android:name="videoUrl"
+            app:argType="string" />
     </fragment>
 
 </navigation>

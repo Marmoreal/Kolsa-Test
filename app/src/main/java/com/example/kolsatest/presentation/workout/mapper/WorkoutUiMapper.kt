@@ -4,7 +4,7 @@ import com.example.kolsatest.domain.model.VideoWorkout
 import com.example.kolsatest.presentation.workout.ui.WorkoutUiState
 import javax.inject.Inject
 
-private const val BASE_URL = "http://ref.test.kolsa.ru"
+private const val BASE_URL = "https://ref.test.kolsa.ru"
 class WorkoutUiMapper @Inject constructor() {
 
     fun getVideoUrl(

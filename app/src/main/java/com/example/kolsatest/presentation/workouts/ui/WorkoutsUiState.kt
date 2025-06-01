@@ -16,4 +16,4 @@ data class WorkoutsUiState(
     val filteredWorkouts: List<WorkoutUi> = emptyList(),
     /** Запрос поиска по названию*/
     val query: String = "",
-): BaseUiState
+): BaseUiState()

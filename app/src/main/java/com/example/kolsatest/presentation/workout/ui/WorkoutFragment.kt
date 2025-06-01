@@ -5,22 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.decode.VideoFrameDecoder
 import coil.load
-import com.example.kolsatest.databinding.WorkoutFragmentBinding
-import com.example.kolsatest.presentation.commonview.StateViewFlipper
+import com.example.kolsatest.databinding.FragmentWorkoutBinding
+import com.example.kolsatest.presentation.commonarchitecture.BaseFragment
+import com.example.kolsatest.presentation.extension.fitInsetsWithPadding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class WorkoutFragment : Fragment() {
+class WorkoutFragment : BaseFragment() {
 
-    private lateinit var binding: WorkoutFragmentBinding
+    private lateinit var binding: FragmentWorkoutBinding
     private val viewModel: WorkoutViewModel by viewModels()
 
     private val args: WorkoutFragmentArgs by navArgs()
@@ -36,7 +36,7 @@ class WorkoutFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = WorkoutFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentWorkoutBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,6 +48,7 @@ class WorkoutFragment : Fragment() {
     }
 
     private fun setupLayout() {
+        binding.root.fitInsetsWithPadding()
         binding.buttonClose.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -60,7 +61,7 @@ class WorkoutFragment : Fragment() {
             viewModel.state.collect { state ->
                 binding.stateViewFlipper.setState(state)
 
-                if (binding.stateViewFlipper.currentState() == StateViewFlipper.State.DATA) {
+                if (binding.stateViewFlipper.currentStateIsData()) {
                     val videoUri = state.videoUrl.toUri()
 
                     binding.imageView.load(videoUri) {
@@ -78,6 +79,13 @@ class WorkoutFragment : Fragment() {
     }
 
     private fun setupContent() = with(binding) {
+        imageView.setOnClickListener {
+            findNavController().navigate(
+                WorkoutFragmentDirections.actionWorkoutFragmentToVideoPlayerFragment(
+                    videoUrl = viewModel.state.value.videoUrl,
+                )
+            )
+        }
         textViewType.text = args.workout.type
         textViewTitle.text = args.workout.title
         textViewDuration.text = args.workout.duration

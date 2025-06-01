@@ -1,7 +1,7 @@
 package com.example.kolsatest.presentation
 
-interface BaseUiState {
-    val isLoading: Boolean
-    val error: Throwable?
-    val isEmptyData: Boolean
+abstract class BaseUiState {
+    abstract val isLoading: Boolean
+    abstract val error: Throwable?
+    open val isEmptyData: Boolean = false
 }
