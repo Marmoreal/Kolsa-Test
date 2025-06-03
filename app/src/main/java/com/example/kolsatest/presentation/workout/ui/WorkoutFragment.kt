@@ -25,8 +25,8 @@ class WorkoutFragment : BaseFragment() {
 
     private val args: WorkoutFragmentArgs by navArgs()
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         viewModel.getVideoWorkout(args.workout.id)
     }

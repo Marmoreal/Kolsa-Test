@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolsatest.domain.LoadableResult
 import com.example.kolsatest.domain.usecases.GetWorkoutsUseCase
+import com.example.kolsatest.presentation.extension.collectResult
 import com.example.kolsatest.presentation.workouts.mapper.WorkoutsUiMapper
 import com.example.kolsatest.presentation.workouts.model.WorkoutUiFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,37 +29,35 @@ class WorkoutsViewModel @Inject constructor(
     }
 
     fun getWorkouts() {
-        getWorkoutsUseCase.execute().onEach { result ->
-            _state.value = when (result) {
-                is LoadableResult.Loading -> {
-                    uiMapper.setLoading(_state.value)
-                }
-                is LoadableResult.Success -> {
-                    uiMapper.getWorkouts(
-                        workouts = result.value,
-                    )
-                }
-                is LoadableResult.Failure -> {
-                    uiMapper.setError(
-                        currentState = _state.value,
-                        error = result.error,
-                    )
-                }
+        getWorkoutsUseCase.execute().collectResult(
+            viewModelScope,
+            onLoading = {
+                _state.update { uiMapper.setLoading(_state.value) }
+            },
+            onSuccess = { workouts ->
+                _state.update { uiMapper.getWorkouts(workouts) }
+            },
+            onError = { error ->
+                _state.update { uiMapper.setError(_state.value, error) }
             }
-        }.launchIn(viewModelScope)
+        )
     }
 
     fun onFilterClicked(filterItem: WorkoutUiFilter) {
-        _state.value = uiMapper.updateWorkoutsByFilter(
-            filterItem = filterItem,
-            currentState = _state.value,
-        )
+        _state.update {
+            uiMapper.updateWorkoutsByFilter(
+                filterItem = filterItem,
+                currentState = _state.value,
+            )
+        }
     }
 
     fun updateSearchQuery(query: String) {
-        _state.value = uiMapper.updateWorkoutsBySearchQuery(
-            query = query.lowercase(),
-            currentState = _state.value,
-        )
+        _state.update {
+            uiMapper.updateWorkoutsBySearchQuery(
+                query = query.lowercase(),
+                currentState = _state.value,
+            )
+        }
     }
 }
